@@ -1,6 +1,9 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.2.51'
+    id 'application'
 }
+
+mainClassName = 'io.ktor.server.netty.DevelopmentEngine'
 
 group 'org.donnie'
 version '1.0-SNAPSHOT'
