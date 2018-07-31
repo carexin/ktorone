@@ -1,22 +1,35 @@
 package blog
 
+import blog.api.songApi
 import io.ktor.application.Application
-import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CallLogging
+import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
-import io.ktor.http.ContentType
-import io.ktor.response.respondText
+import io.ktor.gson.gson
 import io.ktor.routing.Routing
-import io.ktor.routing.get
+import java.text.DateFormat
+import org.jetbrains.exposed.sql.Database
 
 fun Application.main() {
+
+    Database.connect(url = "jdbc:mysql://localhost:3306/ktorone?characterEncoding=utf-8&useSSL=false"
+            , user = "root"
+            , password = "123456"
+            , driver = "com.mysql.cj.jdbc.Driver"
+    )
+
     install(DefaultHeaders)
     install(CallLogging)
-    install(Routing) {
-        get("/") {
-            call.respondText("My Example Blog2", ContentType.Text.Html)
+    install(ContentNegotiation) {
+        gson {
+            setDateFormat(DateFormat.LONG)
+            setPrettyPrinting()
         }
+    }
+
+    install(Routing){
+        songApi()
     }
 }
 
