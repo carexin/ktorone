@@ -1,14 +1,23 @@
 package blog.entity
 
+import org.jetbrains.exposed.dao.EntityID
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
+import org.jetbrains.exposed.dao.IntIdTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
-import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 
-object Song : Table() {
-    val id = integer("id").autoIncrement().primaryKey() // Column<Int>
+object Songs : IntIdTable() {
+
     val name = varchar("name", 50) // Column<String>
+}
+
+class Song(id:EntityID<Int>):IntEntity(id){
+    companion object : IntEntityClass<Song>(Songs)
+    //
+    var name by Songs.name
 }
 
 fun main(args: Array<String>) {
@@ -20,11 +29,11 @@ fun main(args: Array<String>) {
 
     transaction {
 
-        create(Song)
+        create(Songs)
 
-        val id = Song.insert {
-            it[name] = "无人之境"
-        } get Song.id
+        val id = Song.new {
+           name = "皇帝的新衣 skr"
+        }
 
         print("song's id is $id")
         // 批量插入
