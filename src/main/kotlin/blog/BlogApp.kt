@@ -1,5 +1,6 @@
 package blog
 
+import blog.api.fileApi
 import blog.api.songApi
 import io.ktor.application.Application
 import io.ktor.application.install
@@ -30,6 +31,7 @@ fun Application.main() {
 
     install(Routing){
         songApi()
+        fileApi()
     }
 }
 
